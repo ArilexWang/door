@@ -30,13 +30,10 @@ def echo(request):
         return Response(r.json())
 
 
-# @api_view(['GET'], exclude_from_schema=True)
 def heartbeat(request):
     if request.method == 'GET':
-        # para = request.query_params
         key = request.GET.get('Key')
-        result = "DATA=" + json.dumps({'Key': key})
-        result = result.replace("\"", '')
+        result = "DATA={\"Key\":\"" + key + "\"}"
         return HttpResponse(result)
 
 
