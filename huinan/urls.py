@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^echo', views.echo),
     url(r'^heartbeat', views.heartbeat),
+    url(r'^checkCode', views.checkCode),
 ]

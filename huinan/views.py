@@ -8,6 +8,7 @@ import requests
 import time
 import json
 import hashlib
+import base64
 from huinan.WXBizDataCrypt import WXBizDataCrypt
 
 appid = "wx0254886385e4f4ae"
@@ -35,6 +36,27 @@ def heartbeat(request):
         key = request.GET.get('Key')
         result = "DATA={\"Key\":\"" + key + "\"}"
         return HttpResponse(result)
+
+
+def checkCode(request):
+    if request.method == 'GET':
+        code64 = request.GET.get('Card')
+        code = base64.b64decode(code64)
+        codeStr = bytes.decode(code)
+        reader = request.GET.get('Reader')
+        token = get_access_token()
+        r = requests.post(funcUrl, params={
+                          'access_token': token, 'env': env, 'name': 'checkCode'}, data=json.dumps({"code": codeStr, "reader": reader}))
+        result = json.loads(r.text)
+        if result['resp_data'] == 'true':
+            acsRes = "1"
+        else:
+            acsRes = "0"
+        actIndex = reader
+        time = "1"
+        res = "DATA={\"ActIndex\":\"" + actIndex + \
+            "\",\"AcsRes\":\""+acsRes+"\",\"Time\":\""+time+"\"}"
+        return HttpResponse(res)
 
 
 def get_access_token():
