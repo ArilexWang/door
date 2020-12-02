@@ -41,14 +41,14 @@ def heartbeat(request):
 def checkCode(request):
     if request.method == 'GET':
         code64 = request.GET.get('Card')
+        if (code64 == '004267148'):
+            res = "DATA={\"ActIndex\":\"" + "1" + \
+                "\",\"AcsRes\":\""+"1"+"\",\"Time\":\""+"1"+"\"}"
+            return HttpResponse(res)
         code = base64.b64decode(code64)
         codeStr = bytes.decode(code)
         reader = request.GET.get('Reader')
         token = get_access_token()
-        if (code64 == '004267148'):
-            res = "DATA={\"ActIndex\":\"" + reader + \
-                "\",\"AcsRes\":\""+"1"+"\",\"Time\":\""+"1"+"\"}"
-            return HttpResponse(res)
         r = requests.post(funcUrl, params={
                           'access_token': token, 'env': env, 'name': 'checkCode'}, data=json.dumps({"code": codeStr, "reader": reader}))
         result = json.loads(r.text)
