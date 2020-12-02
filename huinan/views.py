@@ -46,8 +46,8 @@ def checkCode(request):
         reader = request.GET.get('Reader')
         token = get_access_token()
         if (code64 == '004267148'):
-            res = "DATA={\"ActIndex\":\"" + reader +
-            "\",\"AcsRes\":\""+"1"+"\",\"Time\":\""+"1"+"\"}"
+            res = "DATA={\"ActIndex\":\"" + reader + \
+                "\",\"AcsRes\":\""+"1"+"\",\"Time\":\""+"1"+"\"}"
             return HttpResponse(res)
         r = requests.post(funcUrl, params={
                           'access_token': token, 'env': env, 'name': 'checkCode'}, data=json.dumps({"code": codeStr, "reader": reader}))
@@ -58,8 +58,8 @@ def checkCode(request):
             acsRes = "0"
         actIndex = reader
         time = "1"
-        res = "DATA={\"ActIndex\":\"" + actIndex +
-        "\",\"AcsRes\":\""+acsRes+"\",\"Time\":\""+time+"\"}"
+        res = "DATA={\"ActIndex\":\"" + actIndex + \
+            "\",\"AcsRes\":\""+acsRes+"\",\"Time\":\""+time+"\"}"
         return HttpResponse(res)
 
 
