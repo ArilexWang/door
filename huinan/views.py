@@ -41,7 +41,7 @@ def heartbeat(request):
 def checkCode(request):
     if request.method == 'GET':
         code64 = request.GET.get('Card')
-        if (code64 == '004267148'):
+        if (code64 == '0004267148'):
             res = "DATA={\"ActIndex\":\"" + "1" + \
                 "\",\"AcsRes\":\""+"1"+"\",\"Time\":\""+"1"+"\"}"
             return HttpResponse(res)
