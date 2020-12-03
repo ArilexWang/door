@@ -46,14 +46,7 @@ def checkCode(request):
                 "\",\"AcsRes\":\""+"1"+"\",\"Time\":\""+"1"+"\"}"
             return HttpResponse(res)
         else:
-            code64.replace(' ', '+')
-            code64.replace('-', '+')
-            if (len(code64) % 4 == 2):
-                code64 += '=='
-            if (len(code64) % 4 == 3):
-                code64 += '='
-            code = base64.b64decode(code64)
-            codeStr = bytes.decode(code)
+            codeStr = decode64(code64)
             reader = request.GET.get('Reader')
             token = get_access_token()
             r = requests.post(funcUrl, params={
@@ -67,8 +60,9 @@ def checkCode(request):
             time = "1"
             res = "DATA={\"ActIndex\":\"" + actIndex + \
                 "\",\"AcsRes\":\""+acsRes+"\",\"Time\":\""+time + \
-                "\",\"Voice\":\"欢迎光临\",\"Node\":\"扫码入场\",\"Name\":\"张三\"}"
-            return HttpResponse(res)
+                "\",\"Voice\":\"欢迎光临\",\"Note\":\"扫码入场\",\"Name\":\"张三\"}"
+            print(res.encode('gb2312'))
+            return HttpResponse(res.encode('gb2312'), content_type='text/html;charset=gbk')
 
 
 def get_access_token():
@@ -81,3 +75,15 @@ def get_access_token():
         access_token = d['access_token']
         exp_time = time.time() + d['expires_in'] - 10
     return access_token
+
+
+def decode64(str):
+    str.replace(' ', '+')
+    str.replace('-', '+')
+    str.replace('_', '/')
+    if (len(str) % 4 == 2):
+        str += '=='
+    if (len(str) % 4 == 3):
+        str += '='
+    code = base64.b64decode(str)
+    return bytes.decode(code)
