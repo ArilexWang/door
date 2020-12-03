@@ -9,6 +9,7 @@ import time
 import json
 import hashlib
 import base64
+import re
 from huinan.WXBizDataCrypt import WXBizDataCrypt
 
 appid = "wx0254886385e4f4ae"
@@ -52,17 +53,15 @@ def checkCode(request):
             r = requests.post(funcUrl, params={
                 'access_token': token, 'env': env, 'name': 'checkCode'}, data=json.dumps({"code": codeStr, "reader": reader}))
             result = json.loads(r.text)
-            if result['resp_data'] == 'true':
-                acsRes = "1"
-            else:
-                acsRes = "0"
-            actIndex = reader
-            time = "1"
-            res = "DATA={\"ActIndex\":\"" + actIndex + \
-                "\",\"AcsRes\":\""+acsRes+"\",\"Time\":\""+time + \
-                "\",\"Voice\":\"欢迎光临\",\"Note\":\"扫码入场\",\"Name\":\"张三\"}"
-            print(res.encode('gb2312'))
-            return HttpResponse(res.encode('gb2312'), content_type='text/html;charset=gbk')
+            result = json.loads(result['resp_data'])
+            result['ActIndex'] = reader
+            result['Time'] = "1"
+            result['Name'] = re.sub(
+                u"([^\u4e00-\u9fa5\u0030-\u0039\u0041-\u005a\u0061-\u007a])", "", result['Name'])
+            result = json.dumps(result, ensure_ascii=False)
+            result = "DATA=" + result
+            print(json.dumps(result, ensure_ascii=False))
+            return HttpResponse(result.encode('gb2312'), content_type='text/html;charset=gbk')
 
 
 def get_access_token():
