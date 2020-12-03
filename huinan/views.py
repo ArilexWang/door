@@ -45,6 +45,12 @@ def checkCode(request):
             res = "DATA={\"ActIndex\":\"" + "1" + \
                 "\",\"AcsRes\":\""+"1"+"\",\"Time\":\""+"1"+"\"}"
             return HttpResponse(res)
+        code64.replace(' ', '+')
+        code64.replace('-', '+')
+        if (len(code64) % 4 == 2):
+            code64 += '=='
+        if (len(code64) % 4 == 3):
+            code64 += '='
         code = base64.b64decode(code64)
         codeStr = bytes.decode(code)
         reader = request.GET.get('Reader')
