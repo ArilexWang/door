@@ -45,28 +45,30 @@ def checkCode(request):
             res = "DATA={\"ActIndex\":\"" + "1" + \
                 "\",\"AcsRes\":\""+"1"+"\",\"Time\":\""+"1"+"\"}"
             return HttpResponse(res)
-        code64.replace(' ', '+')
-        code64.replace('-', '+')
-        if (len(code64) % 4 == 2):
-            code64 += '=='
-        if (len(code64) % 4 == 3):
-            code64 += '='
-        code = base64.b64decode(code64)
-        codeStr = bytes.decode(code)
-        reader = request.GET.get('Reader')
-        token = get_access_token()
-        r = requests.post(funcUrl, params={
-                          'access_token': token, 'env': env, 'name': 'checkCode'}, data=json.dumps({"code": codeStr, "reader": reader}))
-        result = json.loads(r.text)
-        if result['resp_data'] == 'true':
-            acsRes = "1"
         else:
-            acsRes = "0"
-        actIndex = reader
-        time = "1"
-        res = "DATA={\"ActIndex\":\"" + actIndex + \
-            "\",\"AcsRes\":\""+acsRes+"\",\"Time\":\""+time+"\"}"
-        return HttpResponse(res)
+            code64.replace(' ', '+')
+            code64.replace('-', '+')
+            if (len(code64) % 4 == 2):
+                code64 += '=='
+            if (len(code64) % 4 == 3):
+                code64 += '='
+            code = base64.b64decode(code64)
+            codeStr = bytes.decode(code)
+            reader = request.GET.get('Reader')
+            token = get_access_token()
+            r = requests.post(funcUrl, params={
+                'access_token': token, 'env': env, 'name': 'checkCode'}, data=json.dumps({"code": codeStr, "reader": reader}))
+            result = json.loads(r.text)
+            if result['resp_data'] == 'true':
+                acsRes = "1"
+            else:
+                acsRes = "0"
+            actIndex = reader
+            time = "1"
+            res = "DATA={\"ActIndex\":\"" + actIndex + \
+                "\",\"AcsRes\":\""+acsRes+"\",\"Time\":\""+time + \
+                "\",\"Voice\":\"欢迎光临\",\"Node\":\"扫码入场\",\"Name\":\"张三\"}"
+            return HttpResponse(res)
 
 
 def get_access_token():
