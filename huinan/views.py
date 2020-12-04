@@ -59,7 +59,7 @@ def checkCode(request):
             result['Name'] = re.sub(
                 u"([^\u4e00-\u9fa5\u0030-\u0039\u0041-\u005a\u0061-\u007a])", "", result['Name'])
             result = json.dumps(result, ensure_ascii=False)
-            result = "DATA=" + result
+            result = "DATA=" + result.replace(" ", "")
             print(json.dumps(result, ensure_ascii=False))
             return HttpResponse(result.encode('gb2312'), content_type='text/html;charset=gbk')
 
