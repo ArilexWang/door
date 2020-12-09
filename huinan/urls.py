@@ -9,7 +9,6 @@ router = DefaultRouter()
 # 另外，我们还要包含可浏览的API的登录URL。
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'^echo', views.echo),
     url(r'^heartbeat', views.heartbeat),
     url(r'^checkCode', views.checkCode),
 ]
